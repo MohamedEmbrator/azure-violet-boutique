@@ -1,13 +1,23 @@
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ArrowLeft, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate } from "react-router-dom";
+
+// Egyptian Governorates in Arabic
+const egyptianGovernorates = [
+  "القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "البحر الأحمر", "البحيرة", "الفيوم", "الغربية",
+  "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد", "السويس", "أسوان",
+  "أسيوط", "بني سويف", "بورسعيد", "دمياط", "الشرقية", "جنوب سيناء", "كفر الشيخ", 
+  "مطروح", "الأقصر", "قنا", "شمال سيناء", "سوهاج"
+];
 
 const AuthPage = () => {
   const { toast } = useToast();
@@ -27,7 +37,10 @@ const AuthPage = () => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    phone: "",
+    address: "",
+    governorate: ""
   });
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -38,8 +51,8 @@ const AuthPage = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     toast({
-      title: "Welcome back!",
-      description: "You have successfully signed in to your account."
+      title: "أهلاً بعودتك!",
+      description: "تم تسجيل الدخول بنجاح إلى حسابك."
     });
     
     setIsLoading(false);
@@ -51,8 +64,8 @@ const AuthPage = () => {
     
     if (registerForm.password !== registerForm.confirmPassword) {
       toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match.",
+        title: "كلمات المرور غير متطابقة",
+        description: "يرجى التأكد من تطابق كلمات المرور.",
         variant: "destructive"
       });
       return;
@@ -60,8 +73,17 @@ const AuthPage = () => {
 
     if (registerForm.password.length < 6) {
       toast({
-        title: "Password too short",
-        description: "Password must be at least 6 characters long.",
+        title: "كلمة المرور قصيرة جداً",
+        description: "يجب أن تكون كلمة المرور 6 أحرف على الأقل.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!registerForm.phone || !registerForm.address || !registerForm.governorate) {
+      toast({
+        title: "يرجى إكمال جميع البيانات",
+        description: "جميع الحقول مطلوبة.",
         variant: "destructive"
       });
       return;
@@ -73,8 +95,8 @@ const AuthPage = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     toast({
-      title: "Account created successfully!",
-      description: "Welcome to TrendyCloth. You can now start shopping."
+      title: "تم إنشاء الحساب بنجاح!",
+      description: "مرحباً بك في متجر الأزياء. يمكنك الآن بدء التسوق."
     });
     
     setIsLoading(false);
@@ -82,7 +104,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4" dir="rtl">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-grid-pattern opacity-10" />
       
@@ -94,44 +116,44 @@ const AuthPage = () => {
           onClick={() => navigate("/")}
           className="mb-6 text-white/80 hover:text-white hover:bg-white/10"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Home
+          <ArrowLeft className="ml-2 h-4 w-4" />
+          العودة للرئيسية
         </Button>
 
         <Card className="backdrop-blur-sm bg-white/95 border-0 shadow-strong">
           <CardHeader className="text-center pb-2">
-            <div className="flex items-center justify-center space-x-2 mb-4">
+            <div className="flex items-center justify-center space-x-2 space-x-reverse mb-4">
               <div className="h-10 w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <span className="text-lg font-bold text-white">TC</span>
+                <span className="text-lg font-bold text-white">م</span>
               </div>
               <span className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                TrendyCloth
+                متجر الأزياء
               </span>
             </div>
-            <CardTitle className="text-2xl">Welcome</CardTitle>
+            <CardTitle className="text-2xl">أهلاً وسهلاً</CardTitle>
             <CardDescription>
-              Sign in to your account or create a new one
+              سجل دخولك إلى حسابك أو أنشئ حساباً جديداً
             </CardDescription>
           </CardHeader>
 
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="login">Sign In</TabsTrigger>
-                <TabsTrigger value="register">Sign Up</TabsTrigger>
+                <TabsTrigger value="login">تسجيل الدخول</TabsTrigger>
+                <TabsTrigger value="register">تسجيل حساب جديد</TabsTrigger>
               </TabsList>
 
               {/* Login Tab */}
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
+                    <Label htmlFor="login-email">البريد الإلكتروني</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
                         id="login-email"
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="أدخل بريدك الإلكتروني"
                         value={loginForm.email}
                         onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
                         className="pl-10"
@@ -141,13 +163,13 @@ const AuthPage = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
+                    <Label htmlFor="login-password">كلمة المرور</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
                         id="login-password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="Enter your password"
+                        placeholder="أدخل كلمة المرور"
                         value={loginForm.password}
                         onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
                         className="pl-10 pr-10"
@@ -170,18 +192,18 @@ const AuthPage = () => {
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 space-x-reverse">
                       <Checkbox
                         id="remember"
                         checked={rememberMe}
                         onCheckedChange={(checked) => setRememberMe(checked === true)}
                       />
                       <Label htmlFor="remember" className="text-sm cursor-pointer">
-                        Remember me
+                        تذكرني
                       </Label>
                     </div>
                     <Button variant="link" size="sm" className="p-0 h-auto">
-                      Forgot password?
+                      نسيت كلمة المرور؟
                     </Button>
                   </div>
 
@@ -191,7 +213,7 @@ const AuthPage = () => {
                     size="lg"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </form>
@@ -209,7 +231,7 @@ const AuthPage = () => {
                   
                   <div className="grid grid-cols-2 gap-3 mt-4">
                     <Button variant="outline" size="sm" disabled>
-                      <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+                      <svg className="ml-2 h-4 w-4" viewBox="0 0 24 24">
                         <path
                           fill="currentColor"
                           d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -230,7 +252,7 @@ const AuthPage = () => {
                       Google
                     </Button>
                     <Button variant="outline" size="sm" disabled>
-                      <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                      <svg className="ml-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                       </svg>
                       Facebook
@@ -243,13 +265,13 @@ const AuthPage = () => {
               <TabsContent value="register">
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="register-name">Full Name</Label>
+                    <Label htmlFor="register-name">الاسم الكامل</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
                         id="register-name"
                         type="text"
-                        placeholder="Enter your full name"
+                        placeholder="أدخل اسمك الكامل"
                         value={registerForm.name}
                         onChange={(e) => setRegisterForm(prev => ({ ...prev, name: e.target.value }))}
                         className="pl-10"
@@ -259,13 +281,13 @@ const AuthPage = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="register-email">Email</Label>
+                    <Label htmlFor="register-email">البريد الإلكتروني</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
                         id="register-email"
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="أدخل بريدك الإلكتروني"
                         value={registerForm.email}
                         onChange={(e) => setRegisterForm(prev => ({ ...prev, email: e.target.value }))}
                         className="pl-10"
@@ -275,13 +297,61 @@ const AuthPage = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="register-password">Password</Label>
+                    <Label htmlFor="register-phone">رقم الهاتف</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                      <Input
+                        id="register-phone"
+                        type="tel"
+                        placeholder="أدخل رقم هاتفك"
+                        value={registerForm.phone}
+                        onChange={(e) => setRegisterForm(prev => ({ ...prev, phone: e.target.value }))}
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-governorate">المحافظة</Label>
+                    <Select 
+                      value={registerForm.governorate} 
+                      onValueChange={(value) => setRegisterForm(prev => ({ ...prev, governorate: value }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر محافظتك" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {egyptianGovernorates.map((gov) => (
+                          <SelectItem key={gov} value={gov}>{gov}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-address">العنوان التفصيلي</Label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-3 text-muted-foreground h-4 w-4" />
+                      <Textarea
+                        id="register-address"
+                        placeholder="أدخل عنوانك التفصيلي"
+                        value={registerForm.address}
+                        onChange={(e) => setRegisterForm(prev => ({ ...prev, address: e.target.value }))}
+                        className="pl-10 min-h-[80px]"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="register-password">كلمة المرور</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
                         id="register-password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="Create a password"
+                        placeholder="أنشئ كلمة مرور"
                         value={registerForm.password}
                         onChange={(e) => setRegisterForm(prev => ({ ...prev, password: e.target.value }))}
                         className="pl-10 pr-10"
@@ -304,13 +374,13 @@ const AuthPage = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="register-confirm-password">Confirm Password</Label>
+                    <Label htmlFor="register-confirm-password">تأكيد كلمة المرور</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                       <Input
                         id="register-confirm-password"
                         type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Confirm your password"
+                        placeholder="أكد كلمة المرور"
                         value={registerForm.confirmPassword}
                         onChange={(e) => setRegisterForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
                         className="pl-10 pr-10"
@@ -332,16 +402,16 @@ const AuthPage = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 space-x-reverse">
                     <Checkbox id="terms" required />
                     <Label htmlFor="terms" className="text-sm cursor-pointer">
-                      I agree to the{" "}
+                      أوافق على{" "}
                       <Button variant="link" size="sm" className="p-0 h-auto text-primary">
-                        Terms of Service
+                        شروط الخدمة
                       </Button>{" "}
-                      and{" "}
+                      و{" "}
                       <Button variant="link" size="sm" className="p-0 h-auto text-primary">
-                        Privacy Policy
+                        سياسة الخصوصية
                       </Button>
                     </Label>
                   </div>
@@ -352,7 +422,7 @@ const AuthPage = () => {
                     size="lg"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Creating Account..." : "Create Account"}
+                    {isLoading ? "جاري إنشاء الحساب..." : "إنشاء حساب جديد"}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </form>
@@ -362,7 +432,7 @@ const AuthPage = () => {
         </Card>
 
         <p className="text-center text-white/60 text-sm mt-6">
-          By continuing, you agree to our Terms of Service and Privacy Policy
+          بالمتابعة، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا
         </p>
       </div>
     </div>

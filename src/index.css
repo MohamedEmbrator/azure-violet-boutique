@@ -139,6 +139,16 @@
 
   html {
     @apply scroll-smooth;
+    direction: rtl;
+  }
+
+  /* RTL Support */
+  [dir="rtl"] {
+    direction: rtl;
+  }
+
+  [dir="rtl"] .ltr {
+    direction: ltr;
   }
 }
 

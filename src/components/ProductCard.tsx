@@ -74,7 +74,7 @@ const ProductCard = ({
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {isNew && (
               <Badge variant="secondary" className="bg-success text-success-foreground">
-                New
+                جديد
               </Badge>
             )}
             {isOnSale && discountPercentage > 0 && (
@@ -114,8 +114,8 @@ const ProductCard = ({
               className="w-full btn-gradient"
               size="sm"
             >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              {isLoading ? "Adding..." : "Add to Cart"}
+              <ShoppingCart className="h-4 w-4 ml-2" />
+              {isLoading ? "جاري الإضافة..." : "إضافة للعربة"}
             </Button>
           </div>
         </div>
@@ -172,10 +172,10 @@ const ProductCard = ({
 
           {/* Price */}
           <div className="flex items-center gap-2">
-            <span className="price-tag">${price.toFixed(2)}</span>
+            <span className="price-tag">{price.toFixed(2)} جنيه</span>
             {originalPrice && originalPrice > price && (
               <span className="text-sm text-muted-foreground line-through">
-                ${originalPrice.toFixed(2)}
+                {originalPrice.toFixed(2)} جنيه
               </span>
             )}
           </div>

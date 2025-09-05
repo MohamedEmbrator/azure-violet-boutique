@@ -116,7 +116,7 @@ const HomePage = () => {
   const [featuredProducts, setFeaturedProducts] = useState(latestProducts.slice(0, 8));
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir="rtl">
       <Header />
       
       {/* Hero Section with Carousel */}
@@ -145,17 +145,17 @@ const HomePage = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Shop by Category</h2>
+            <h2 className="text-3xl font-bold mb-4">تسوق حسب الفئة</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover our curated collections designed for every style and occasion
+              اكتشف مجموعاتنا المختارة بعناية والمصممة لكل طراز ومناسبة
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { name: "Men's Collection", image: "https://picsum.photos/800/600?random=20", link: "/category/men" },
-              { name: "Women's Collection", image: "https://picsum.photos/800/600?random=21", link: "/category/women" },
-              { name: "Accessories", image: "https://picsum.photos/800/600?random=22", link: "/category/accessories" }
+              { name: "مجموعة الرجال", image: "https://picsum.photos/800/600?random=20", link: "/category/men" },
+              { name: "مجموعة النساء", image: "https://picsum.photos/800/600?random=21", link: "/category/women" },
+              { name: "الإكسسوارات", image: "https://picsum.photos/800/600?random=22", link: "/category/accessories" }
             ].map((category, index) => (
               <Link key={index} to={category.link} className="group block">
                 <Card className="overflow-hidden hover:shadow-medium transition-all duration-300">
@@ -169,7 +169,7 @@ const HomePage = () => {
                     <div className="absolute bottom-4 left-4 right-4">
                       <h3 className="text-xl font-bold text-white mb-2">{category.name}</h3>
                       <Button variant="outline" size="sm" className="bg-white/20 backdrop-blur-sm border-white text-white hover:bg-white hover:text-black">
-                        Explore Collection
+                        استكشف المجموعة
                       </Button>
                     </div>
                   </div>
@@ -185,12 +185,12 @@ const HomePage = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-bold mb-2">Latest Arrivals</h2>
-              <p className="text-muted-foreground">Discover our newest products and trending styles</p>
+              <h2 className="text-3xl font-bold mb-2">أحدث الوصولات</h2>
+              <p className="text-muted-foreground">اكتشف أحدث منتجاتنا والأنماط الرائجة</p>
             </div>
             <Button variant="outline" asChild>
               <Link to="/products">
-                View All Products
+                عرض جميع المنتجات
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -209,18 +209,18 @@ const HomePage = () => {
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-primary text-white border-0">
             <CardContent className="p-12 text-center">
-              <h3 className="text-3xl font-bold mb-4">Stay Updated</h3>
+              <h3 className="text-3xl font-bold mb-4">ابق على اطلاع</h3>
               <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-                Subscribe to our newsletter and be the first to know about new arrivals, exclusive deals, and fashion tips.
+                اشترك في نشرتنا الإخبارية وكن أول من يعلم بالوصولات الجديدة والعروض الحصرية ونصائح الموضة.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="أدخل بريدك الإلكتروني"
                   className="flex-1 px-4 py-3 rounded-lg text-black border-0 focus:outline-none focus:ring-2 focus:ring-white/50"
                 />
                 <Button variant="secondary" size="lg" className="bg-white text-primary hover:bg-white/90">
-                  Subscribe
+                  اشتراك
                 </Button>
               </div>
             </CardContent>

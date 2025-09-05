@@ -57,11 +57,11 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
         {/* Top bar with balance and account */}
         <div className="flex items-center justify-between py-2 text-sm border-b">
           <div className="flex items-center gap-4">
-            <span className="text-muted-foreground">Free shipping on orders over $50</span>
+            <span className="text-muted-foreground">شحن مجاني للطلبات أكثر من 50 جنيه</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="font-medium">
-              Balance: <span className="text-primary font-bold">${userBalance.toFixed(2)}</span>
+              الرصيد: <span className="text-primary font-bold">{userBalance.toFixed(2)} جنيه</span>
             </span>
             <Button
               variant="ghost"
@@ -77,12 +77,12 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
         {/* Main header */}
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-2 space-x-reverse">
             <div className="h-10 w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <span className="text-xl font-bold text-white">TC</span>
+              <span className="text-xl font-bold text-white">م</span>
             </div>
             <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              TrendyCloth
+              متجر الأزياء
             </span>
           </Link>
 
@@ -92,7 +92,7 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 type="text"
-                placeholder="Search products..."
+                placeholder="البحث عن المنتجات..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 pr-4"
@@ -103,16 +103,18 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
           {/* Right section */}
           <div className="flex items-center gap-2">
             {/* Cart */}
-            <Button variant="ghost" size="sm" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              {cartItemsCount > 0 && (
-                <Badge 
-                  variant="destructive" 
-                  className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-                >
-                  {cartItemsCount}
-                </Badge>
-              )}
+            <Button variant="ghost" size="sm" className="relative" asChild>
+              <Link to="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                {cartItemsCount > 0 && (
+                  <Badge 
+                    variant="destructive" 
+                    className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+                  >
+                    {cartItemsCount}
+                  </Badge>
+                )}
+              </Link>
             </Button>
 
             {/* User menu */}
@@ -123,21 +125,26 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/profile">Profile</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/orders">My Orders</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/balance">Add Balance</Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link to="/login">Sign In</Link>
-                </DropdownMenuItem>
+                <div dir="rtl">
+                  <DropdownMenuLabel>حسابي</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">الملف الشخصي</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/orders">طلباتي</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/balance">إضافة رصيد</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/cart">عربة التسوق</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/login">تسجيل الدخول</Link>
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -154,21 +161,24 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
         </div>
 
         {/* Navigation - desktop */}
-        <nav className="hidden md:flex items-center space-x-6 py-4 border-t">
+        <nav className="hidden md:flex items-center space-x-6 space-x-reverse py-4 border-t" dir="rtl">
           <Link to="/products" className="text-sm font-medium hover:text-primary transition-colors">
-            All Products
+            جميع المنتجات
           </Link>
           <Link to="/category/men" className="text-sm font-medium hover:text-primary transition-colors">
-            Men
+            الرجال
           </Link>
           <Link to="/category/women" className="text-sm font-medium hover:text-primary transition-colors">
-            Women
+            النساء
           </Link>
           <Link to="/category/accessories" className="text-sm font-medium hover:text-primary transition-colors">
-            Accessories
+            الإكسسوارات
+          </Link>
+          <Link to="/cart" className="text-sm font-medium hover:text-primary transition-colors">
+            عربة التسوق
           </Link>
           <Link to="/category/sale" className="text-sm font-medium hover:text-primary transition-colors text-destructive">
-            Sale
+            التخفيضات
           </Link>
         </nav>
       </div>
@@ -183,7 +193,7 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                 <Input
                   type="text"
-                  placeholder="Search products..."
+                  placeholder="البحث عن المنتجات..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 pr-4"
@@ -192,21 +202,24 @@ const Header = ({ userBalance = 1250.00, cartItemsCount = 3 }: HeaderProps) => {
             </form>
 
             {/* Mobile navigation links */}
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2" dir="rtl">
               <Link to="/products" className="text-sm font-medium hover:text-primary transition-colors py-2">
-                All Products
+                جميع المنتجات
               </Link>
               <Link to="/category/men" className="text-sm font-medium hover:text-primary transition-colors py-2">
-                Men
+                الرجال
               </Link>
               <Link to="/category/women" className="text-sm font-medium hover:text-primary transition-colors py-2">
-                Women
+                النساء
               </Link>
               <Link to="/category/accessories" className="text-sm font-medium hover:text-primary transition-colors py-2">
-                Accessories
+                الإكسسوارات
+              </Link>
+              <Link to="/cart" className="text-sm font-medium hover:text-primary transition-colors py-2">
+                عربة التسوق
               </Link>
               <Link to="/category/sale" className="text-sm font-medium hover:text-primary transition-colors py-2 text-destructive">
-                Sale
+                التخفيضات
               </Link>
             </div>
           </div>
